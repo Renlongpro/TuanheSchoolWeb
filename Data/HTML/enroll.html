@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>湍河二初中\注册</title>
+    <link rel="stylesheet" type="text/css" href="/Data/CSS/Index.css" />
+    <script src="/Data/JS/JQ.js"></script>
+</head>
+
+<body id="main">
+    <div id="bar"></div>
+    <div style="height: 50px;width: 100%;margin: 0px;padding: 0%;"></div>
+    <!--主体内容-->
+    <div class="main">
+        <div style="text-align:center ;" class="login">
+            <div class="login_title">
+                <h1>湍河二初中</h1>
+                <h2>注册</h2>
+            </div>
+            <ul class="login_form">
+                <li>
+                    <input type="text" name="username" placeholder="请输入用户名" />
+                </li>
+                <li>
+                    <input type="text" name="emall" placeholder="请输入邮箱" />
+                </li>
+                <li>
+                    <input type="text" name="Yanzheng" placeholder="验证码" />
+                    <button id="Yanzheng" onclick="Yanzhen()">获取验证码</button>
+                </li>
+                <li>
+                    <input type="password" name="password" placeholder="请输入密码" />
+                </li>
+                <li>
+                    <button onclick="Zhu();">注册</button>
+                </li>
+                <a id="hui" href="/Data/HTML/login.html">已有账号，点我登录</a>
+            </ul>
+        </div>
+        <script>
+            //将用户名和密码提交到/Data/PHP/enroll.php
+            function Zhu() {
+                var username = $("input[name='username']").val();
+                var password = $("input[name='password']").val();
+                var emall = $("input[name='emall']").val();
+                var Yanzheng = $("input[name='Yanzheng']").val();
+                //用户名和密码不能为空不能包含特殊字符不能超过20个字符,校检邮箱格式
+                if (username == "" || password == "" || emall == "") {
+                    alert("用户名,邮箱,或密码不能为空");
+                } else if (username.length > 20 || password.length > 20) {
+                    alert("用户名或密码不能超过20个字符");
+                } else if (username.match(/[^\w\u4e00-\u9fa5]/g)) {
+                    alert("用户名不能包含特殊字符");
+                } else if (!emall.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+                    alert("邮箱格式不正确");
+                } else {
+                    $.ajax({
+                        url: "/Data/PHP/enroll.php",
+                        type: "post",
+                        data: {
+                            username: username,
+                            password: password,
+                            emall: emall,
+                            code: Yanzheng
+                        },
+                        success: function(data) {
+                            if (data == "1") {
+                                alert("注册成功");
+                                window.location("/Data/HTML/login.html");
+                            } else if (data == "2") {
+                                alert("用户名已存在");
+                            } else if (data == "3") {
+                                alert("邮箱已存在");
+                            } else if (data == "0") {
+                                alert("注册失败");
+                            } else if (data == "-1") {
+                                alert("参数不合法");
+                            } else if (data == "-2") {
+                                alert("验证码错误");
+                            }
+                        }
+                    });
+                }
+            }
+
+            function Yanzhen() {
+                var emall = $("input[name='emall']").val();
+                if (emall == "") {
+                    alert("邮箱不能为空");
+                } else if (!emall.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+                    alert("邮箱格式不正确");
+                } else {
+                    $.ajax({
+                        url: "/Data/PHP/Yanzhen.php",
+                        type: "get",
+                        data: {
+                            to: emall
+                        },
+                        success: function(data) {
+                            if (data == "OK") {
+                                alert("验证码已发送");
+                                Wait60s();
+                            } else if (data == "-1") {
+                                alert("参数不合法");
+                            } else {
+                                alert("验证码发送失败");
+                            }
+                        }
+                    });
+                }
+            }
+
+            function Wait60s() {
+                //设置按钮不可用
+                $("#Yanzheng").attr("disabled", true);
+                //按钮文字变灰
+                $("#Yanzheng").css("background-color", "#ccc");
+                var time = 60;
+                var timer = setInterval(function() {
+                    time--;
+                    $("#Yanzheng").html(time + "秒后重新获取");
+                    if (time == 0) {
+                        clearInterval(timer);
+                        //设置按钮可用
+                        $("#Yanzheng").attr("disabled", false);
+                        //按钮文字变红
+                        $("#Yanzheng").css("background-color", "#f00");
+                        $("#Yanzheng").html("获取验证码");
+                    }
+                }, 1000);
+            }
+            $("#bar").load("/Data/PHP/bar.php");
+            $.get("/Data/PHP/Base.php?visit", function(data) {});
+        </script>
+</body>
+
+</html>

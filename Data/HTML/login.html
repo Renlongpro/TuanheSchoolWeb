@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>湍河二初中</title>
+    <link rel="stylesheet" type="text/css" href="/Data/CSS/Index.css" />
+    <script src="/Data/JS/JQ.js"></script>
+</head>
+
+<body id="main">
+    <div id="bar"></div>
+    <div style="height: 50px;width: 100%;margin: 0px;padding: 0%;"></div>
+    <!--主体内容-->
+    <div class="main">
+        <div style="text-align:center ;" class="login">
+            <div class="login_title">
+                <h1>湍河二初中</h1>
+                <h2>登录</h2>
+            </div>
+            <ul class="login_form">
+                <li>
+                    <input type="text" name="username" placeholder="请输入用户名" />
+                </li>
+                <li>
+                    <input type="password" name="password" placeholder="请输入密码" />
+                </li>
+                <input type="checkbox" name="remember" />
+                <span>七天内免登陆</span>
+                <li>
+                    <button onclick="Den();">登陆</button>
+                </li>
+                <a id="hui" href="/Data/HTML/enroll.html">没有账号，点我注册</a>
+            </ul>
+        </div>
+    </div>
+    <script>
+        //将用户名和密码提交到/Data/PHP/login.php
+        function Den() {
+            var username = $("input[name='username']").val();
+            var password = $("input[name='password']").val();
+            var remember; //检查是否选中了七天免登陆
+            if ($("input[name='remember']").is(":checked")) {
+                remember = 1;
+            } else {
+                remember = 0;
+            }
+            $.ajax({
+                url: "/Data/PHP/login.php",
+                type: "post",
+                data: {
+                    username: username,
+                    password: password,
+                    remember: remember
+                },
+                success: function success(data) {
+                    if (data.charAt(data.strlength - 1) == "1") {
+                        alert("登陆成功");
+                        window.location.href = "/index.php";
+                    } else if (data > Number(new Date()) / 1000) {
+                        //data转换为解封日期
+                        var date = new Date(data * 1000);
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        var hour = date.getHours();
+                        var minute = date.getMinutes();
+                        var second = date.getSeconds();
+                        var time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                        alert("账号已被封，解封时间为" + time);
+                    } else {
+                        alert("登陆失败");
+                    }
+                }
+            });
+        }
+        $("#bar").load("/Data/PHP/bar.php");
+        $.get("/Data/PHP/Base.php?visit", function(data) {});
+    </script>
+</body>
+
+</html>
