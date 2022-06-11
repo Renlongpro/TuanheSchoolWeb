@@ -1,9 +1,9 @@
 <?php
 //Connect to database
 //Database address:location
-//         loginname:bvhgujkxbb6cd
-//         password:17815616629qQ
-$sql = mysqli_connect("127.0.0.1", "bvhgujkxbb6cd", "17815616629qQ");
+//         loginname:
+//         password:
+$sql = mysqli_connect("127.0.0.1", "", "");
 if (!$sql) {
    die("Could not connect error");
 }
