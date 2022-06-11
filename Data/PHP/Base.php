@@ -110,7 +110,7 @@ function SendEmail($subject, $content, $to, $Name)
    $mail->Port = 465;
    $mail->CharSet = "utf-8";
    $mail->Username = "3489056763@qq.com";
-   $mail->Password = "amapzgdygopbchga";
+   $mail->Password = "";//password is lost.
    $mail->FromName = $Name;
    $mail->From = "3489056763@qq.com";
    $mail->isHTML(true);
