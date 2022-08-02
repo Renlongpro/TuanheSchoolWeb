@@ -1,0 +1,316 @@
+
+#main {
+    background-image: url("/Data/Imagers/BackGround.jpg");
+    background-size: cover;
+    transition: all 0.5s;
+    font-weight: 900;
+}
+
+.top {
+    background-color: #79bd54;
+    border-radius: 0px 0px 20px 20px;
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    animation-name: la;
+    animation-duration: 1s;
+}
+
+@keyframes la {
+    0% {
+        height: 0px;
+    }
+    100% {
+        height: 50px;
+    }
+}
+
+.nav {
+    width: 100%;
+    height: 50px;
+    margin: 0px;
+    padding: 0%;
+}
+
+li {
+    list-style: none;
+}
+
+.nav li {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 20px;
+    height: 100%;
+    padding-left: 10px;
+}
+
+#leftst {
+    border-radius: 0px 0px 0px 20px;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 20px;
+    height: 100%;
+    padding-left: 10px;
+}
+
+.nav li a {
+    color: rgb(128, 128, 128);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    line-height: 50px;
+}
+
+@keyframes fellout {
+    0% {
+        padding-top: 0px;
+        padding-bottom: 50px;
+    }
+    50% {
+        padding-top: 50px;
+        padding-bottom: 0px;
+    }
+    70% {
+        padding-top: 40px;
+        padding-bottom: 10px;
+    }
+    85% {
+        padding-top: 50px;
+        padding-bottom: 0px;
+    }
+    93% {
+        padding-top: 45px;
+        padding-bottom: 5px;
+    }
+    100% {
+        padding-top: 50px;
+        padding-bottom: 0px;
+    }
+}
+
+.logo {
+    animation-name: fellout;
+    animation-duration: 1.5s;
+    text-align: center;
+    padding-top: 50px;
+    height: 30%;
+}
+
+.schoolsign {
+  border-radius: 50%;
+  height: 100%;
+}
+/*灰色字体*/
+#hui {
+    font-size: small;
+    color: rgb(128, 128, 128);
+}
+
+/*登录等...需要几个格子*/
+.login_form {
+    width: 600px;
+    padding: 0px;
+    box-shadow: -10px 1px 16px 2px;
+    border-radius: 20px;
+    background: -webkit-linear-gradient(left, rgba(0, 255, 21, 0.856), rgba(0, 225, 255, 0.856));
+    transition: all 0.5s;
+    margin: 0 auto;
+}
+
+.login_form li input {
+    width: 60%;
+    height: 60px;
+    border-radius: 5px;
+    border: 1px solid rgb(128, 128, 128);
+    background-color: rgba(0, 0, 0, 0);
+    padding-left: 10px;
+    font-size: 15px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-weight: 900;
+    color: rgb(128, 128, 128);
+    font-size: large;
+    transition: all 0.5s;
+}
+
+#userinfo {
+    text-align: center;
+}
+
+#expline {
+    height: 20px;
+    text-align: center;
+    background-color: darkgreen;
+}
+
+/*按钮*/
+.BlueButton {
+    border: 2px solid #2980b9;
+    color: #2980b9;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: .3s;
+    border-radius: 5px;
+    font-size: large;
+    font-weight: 900;
+}
+.BlueButton::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 0;
+    height: 100%;
+    left: 0;
+    background-color: #2980b9;
+    transition: ease-in-out .5s;
+}
+.BlueButton:hover::before {
+    width: 100%;
+}
+.BlueButton:hover{
+  color: #cad5dc;
+}
+
+
+/*弹出框*/
+.msg__wrap {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    transition: all .5s;
+    transform: translate(-50%, -50%) scale(0, 0);
+    max-width: 50%;
+   
+    background: #fff;
+    box-shadow: 0 0 10px #eee;
+    font-size: 10px;
+  }
+  
+  /* 弹出框头部 */
+  .msg__wrap .msg-header {
+    padding: 10px 10px 0 10px;
+    font-size: 1.8em;
+  }
+  
+  .msg__wrap .msg-header .msg-header-close-button {
+    float: right;
+    cursor: pointer;
+  }
+  
+  /* 弹出框中部 */
+  .msg__wrap .msg-body {
+    padding: 10px 10px 10px 10px;
+    display: flex;
+  }
+  
+  /* 图标 */
+  .msg__wrap .msg-body .msg-body-icon{
+    width: 80px;
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon div{
+    width: 45px;
+    height: 45px;
+    margin: 0 auto;
+    line-height: 45px;
+    color: #fff;
+    border-radius: 50% 50%;
+    font-size: 2em;
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon .msg-body-icon-success{
+    background: #32a323;
+    text-align: center;
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon .msg-body-icon-success::after{
+    content: "成";
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon .msg-body-icon-wrong{
+    background: #ff8080;
+    text-align: center;
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon .msg-body-icon-wrong::after{
+    content: "误";
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon .msg-body-icon-info{
+    background: #80b7ff;
+    text-align: center;
+  }
+  
+  .msg__wrap .msg-body .msg-body-icon .msg-body-icon-info::after{
+    content: "注";
+  }
+  
+  /* 内容 */
+  .msg__wrap .msg-body .msg-body-content{
+    min-width: 200px;
+    font-size: 1.5em;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* 弹出框底部 */
+  .msg__wrap .msg-footer {
+    padding: 0 10px 10px 10px;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  
+  .msg__wrap .msg-footer .msg-footer-btn {
+    width: 50px;
+    height: 30px;
+    border: 0 none;
+    color: #fff;
+    outline: none;
+    font-size: 1em;
+    border-radius: 2px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  .msg__wrap .msg-footer .msg-footer-cancel-button{
+    background-color: #ff3b3b;
+  }
+  
+  .msg__wrap .msg-footer .msg-footer-cancel-button:active{
+    background-color: #ff6f6f;
+  }
+  
+  .msg__wrap .msg-footer .msg-footer-confirm-button{
+    background-color: #4896f0;
+  }
+  
+  .msg__wrap .msg-footer .msg-footer-confirm-button:active{
+    background-color: #1d5fac;
+  }
+  
+  /* 遮罩层 */
+  .msg__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, .5);
+    transition: all .3s;
+    opacity: 0;
+  }
+  .buttomom{
+    position:absolute;
+    left:0;
+    bottom:0;
+  }

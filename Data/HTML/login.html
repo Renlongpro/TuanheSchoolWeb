@@ -1,0 +1,168 @@
+<html lang=zh-CN>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>湍河二初中</title>
+    <link rel="stylesheet" type="text/css" href="/Data/CSS/Index.css" />
+    <script src="/Data/JS/JQ.js"></script>
+</head>
+
+<body id="main">
+    <script src="/Data/JS/Toast.js"></script>
+    <script src="/Data/JS/Base.js"></script>
+    <div id="bar"></div>
+    <div style="height: 50px;width: 100%;margin: 0px;padding: 0%;"></div>
+    <!--主体内容-->
+    <div class="main">
+        <div style="text-align:center ;" class="login">
+            <div class="login_title">
+                <h1>湍河二初中</h1>
+                <h2>登录</h2>
+            </div>
+            <ul id="login_box" class="login_form">
+                <li>
+                    <input type="text" name="username" placeholder="请输入用户名或邮箱" />
+                </li>
+                <li>
+                    <input type="password" name="password" placeholder="请输入密码" />
+                </li>
+                    <input id="remember" type="checkbox" name="remember" />
+                    <span>七天内免登陆</span>
+                <li>
+                    <button class="BlueButton" id="LoginButton" onclick="initDen();">登陆</button>
+                </li>
+            </ul>
+            <a id="hui" href="/Data/HTML/enroll.html">没有账号，点我注册</a>
+        </div>
+    </div>
+    <div class="footer" style="text-align:center;">
+        <input id="acceptUser" type="checkbox" name="remember" />
+        同意<a href="javascript:showUserRule(0)">《用户协议》</a>
+        <input id="acceptCookies" type="checkbox" name="remember" />
+        同意<a href="javascript:showCookiesRule(0)">《cookies使用说明》</a>
+    </div>
+
+    <script>
+        var login_box_dom=document.getElementById("login_box");
+        if(document.cookie.indexOf("Accept=")!=-1){
+            $("[id=acceptCookies]:checkbox").prop("checked", true);
+            $("[id=acceptUser]:checkbox").prop("checked", true);
+        }
+        //将用户名和密码提交到/Data/PHP/login.php
+        function initDen(){
+            if($("input[id='acceptUser']").is(":checked")!=1){
+                showUserRule(1);
+            }
+            else if($("input[id='acceptCookies']").is(":checked")!=1){
+                showCookiesRule(1);
+            }else{
+                Den();
+            }
+        }
+        //调整登录框宽度
+        function AutoSetDomSize(){
+            if( document.body.clientWidth<620){
+                login_box_dom.style.width="90%";
+            }else{
+                login_box_dom.style.width="600px";
+            }
+        }
+        function Den() {
+            var username = $("input[name='username']").val();
+            var password = $("input[name='password']").val();
+            var remember=0; //检查是否选中了七天免登陆
+            var isEmail=0;//下文存储是否有邮箱
+            if ($("input[id='remember']").is(":checked")) {
+                remember = 1;
+            } else {
+                remember = 0;
+            }
+            if (username == "" || password == "") {
+                cocoMessage.warning("用户名密码不能为空", 2000);
+                return 0;
+            } else if (username.length > 20 || password.length > 20) {
+                cocoMessage.warning("用户名或密码不能超过20个字符", 2000);
+                return 0;
+            } else if (username.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+                isEmail=1;
+            } else if (username.match(/[^\w\u4e00-\u9fa5]/g)) {
+                cocoMessage.warning("用户名不能包含特殊字符", 3000);
+                return 0;
+            }
+            if(password.match(/[^\w\u4e00-\u9fa5]/g)){
+                cocoMessage.warning("密码不能包含特殊字符", 3000);
+                return 0;
+            }
+            //设置按钮不可用
+            $("#LoginButton").attr("disabled", true);
+            $("#LoginButton").html("登陆中...");
+            $.ajax({
+                url: "/Data/PHP/UserApi.php",
+                type: "get",
+                data: {
+                    api:1001,
+                    isEmail:isEmail,
+                    username: username,
+                    password: password,
+                    remember: remember
+                },
+                success: function success(data) {
+                    var result = GetApiInfo(data);
+                    if(result!=-1 && result!=-2){
+                        cocoMessage.success("登陆成功,将在3秒后跳转至首页...",3000);
+                        setTimeout("window.location.href='/'",3100);
+                        $("#LoginButton").html("登陆成功");
+                    }else{
+                        $("#LoginButton").attr("disabled", false);
+                        $("#LoginButton").html("登陆");
+                    }
+                }
+            });
+        }
+        function showUserRule(nextDen){
+            new $Msg({
+            title:"用户协议",
+            content:"在本站使用账号应尊守用户条约，",
+            btnName:["同意","拒绝"],
+            cancle:function(){
+            $("[id=acceptUser]:checkbox").prop("checked", false);
+            let cancle = new $Msg({
+                content:"不同意将无法继续使用",
+                footer:false
+              })
+            },
+            confirm:function(){
+                $("[id=acceptUser]:checkbox").prop("checked", true);
+                if (nextDen==1) initDen();
+            }
+            });
+        }
+        function showCookiesRule(nextDen){
+            new $Msg({
+            title:"Cookies使用协议",
+            content:"Cookies是浏览器上一种记录信息的方式，常被用来记录账号登录状态，但不"+
+            "过一些网站通过Cookies来追踪用户，推送广告，甚至盗取信息。\n"+
+            "本网站收集用户意见将会为以下几项必须项作Cookies记录\n1.登录信息\n2.用户同意协议信息\n以上都是必须项，请各位用户谅解。",
+            btnName:["同意","拒绝"],
+            cancle:function(){
+                $("[id=acceptCookies]:checkbox").prop("checked", false);
+            let cancle = new $Msg({
+                content:"不同意将无法继续使用",
+                footer:false
+              })
+            },
+            confirm:function(){
+                $("[id=acceptCookies]:checkbox").prop("checked", true);
+                if (nextDen==1) initDen();
+            }
+            });
+        }
+        AutoSetDomSize();
+        setInterval("AutoSetDomSize();",500);
+        $("#bar").load("/Data/PHP/bar.php");
+        $.get("/Data/PHP/Base.php?visit", function(data) {});
+    </script>
+</body>
+
+</html>

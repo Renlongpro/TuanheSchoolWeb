@@ -1,0 +1,45 @@
+<html lang=zh-CN>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>湍河二初中</title>
+    <link rel="stylesheet" type="text/css" href="/Data/CSS/Index.css" />
+    <script src="/Data/JS/JQ.js"></script>
+</head>
+
+<body id="main">
+    <!--顶部菜单栏-->
+    <div id="bar"></div>
+    <script src="/Data/JS/Toast.js"></script>
+    <script>
+        $("#bar").load("/Data/PHP/bar.php");
+        $.get("/Data/PHP/Base.php?visit", function(data) {});
+        new $Msg({
+            content:"我的自定义弹窗好了\n123",
+            btnName:["同意","拒绝"],
+            cancle:function(){
+              let cancle = new $Msg({
+                content:"我是取消后的回调"
+              })
+            },
+            confirm:function(){
+              new $Msg({content:"我是确定后的回调"})
+            }
+        });
+        new $Msg({
+            content:"我的自定义弹窗好了\n123",
+            btnName:["同意","拒绝"],
+            cancle:function(){
+              let cancle = new $Msg({
+                content:"我是取消后的回调"
+              })
+            },
+            confirm:function(){
+              new $Msg({content:"我是确定后的回调"})
+            }
+        });
+    </script>
+</body>
+
+</html>

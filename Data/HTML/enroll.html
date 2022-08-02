@@ -1,0 +1,211 @@
+<html lang=zh-CN>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>湍河二初中\注册</title>
+    <link rel="stylesheet" type="text/css" href="/Data/CSS/Index.css" />
+    <script src="/Data/JS/JQ.js"></script>
+</head>
+
+<body id="main">
+    <script src="/Data/JS/Toast.js"></script>
+    <script src="/Data/JS/Base.js"></script>
+    <div id="bar"></div>
+    <div style="height: 50px;width: 100%;margin: 0px;padding: 0%;"></div>
+    <!--主体内容-->
+    <div class="main">
+        <div style="text-align:center ;" class="login">
+            <div class="login_title">
+                <h1>湍河二初中</h1>
+                <h2>注册</h2>
+            </div>
+            <ul id="login_box" class="login_form">
+                <li>
+                    <input type="text" name="username" placeholder="请输入用户名" />
+                </li>
+                <li>
+                    <input type="text" name="email" placeholder="请输入邮箱" />
+                </li>
+                <li>
+                    <input id="VerT" type="text" name="Yanzheng" placeholder="验证码" />
+                    <button id="Yanzheng" class="BlueButton" onclick="Yanzhen()">获取验证码</button>
+                </li>
+                <li>
+                    <input type="password" name="password" placeholder="请输入密码" />
+                </li>
+                <li>
+                    <button class="BlueButton" onclick="Zhu();">注册</button>
+                </li>
+                <a id="hui" href="/Data/HTML/login.html">已有账号，点我登录</a>
+            </ul>
+        </div>
+        <div class="footer" style="text-align:center;">
+            <input id="acceptUser" type="checkbox" name="remember" />
+            同意<a href="javascript:showUserRule(0)">《用户协议》</a>
+            <input id="acceptCookies" type="checkbox" name="remember" />
+            同意<a href="javascript:showCookiesRule(0)">《cookies使用说明》</a>
+        </div>
+        <script>
+            //同意协议的Cookies
+            if (document.cookie.indexOf("Accept=") != -1) {
+                $("[id=acceptCookies]:checkbox").prop("checked", true);
+                $("[id=acceptUser]:checkbox").prop("checked", true);
+            }
+            //保证验证码呢一行等宽
+            var VarT = document.getElementById("VerT");
+            var GetVarTNum = document.getElementById("Yanzheng");
+            var VarT_Width = GetVarTNum.offsetWidth;
+            var ScreenWidth=null;
+            var login_box_dom=document.getElementById("login_box");
+            function AutoSetDomSize(WCheck){
+                if(ScreenWidth!= login_box_dom.clientWidth){
+                    ScreenWidth= login_box_dom.clientWidth;
+                    VarT_Width = GetVarTNum.offsetWidth;
+                    VarT.style.width = ScreenWidth * 0.6 - VarT_Width + "px";
+                }
+                if(WCheck==1){
+                    VarT_Width = GetVarTNum.offsetWidth;
+                    VarT.style.width =  ScreenWidth * 0.6 - VarT_Width + "px";
+                }
+                if( document.body.clientWidth<620){
+                    login_box_dom.style.width="90%";
+                }else{
+                    login_box_dom.style.width="600px";
+                }
+            }
+            AutoSetDomSize();
+            AutoSetDomSize();
+            setInterval("AutoSetDomSize(0)",1000);
+            function initDen() {
+                if ($("input[id='acceptUser']").is(":checked") != 1) {
+                    showUserRule(1);
+                }
+                else if ($("input[id='acceptCookies']").is(":checked") != 1) {
+                    showCookiesRule(1);
+                } else {
+                    Zhu();
+                }
+            }
+            //将用户名和密码提交到/Data/PHP/enroll.php
+            function Zhu() {
+                var username = $("input[name='username']").val();
+                var password = $("input[name='password']").val();
+                var email = $("input[name='email']").val();
+                var Yanzheng = $("input[name='Yanzheng']").val();
+                //用户名和密码不能为空不能包含特殊字符不能超过20个字符,校检邮箱格式
+                if (username == "" || password == "" || email == ""||Yanzheng == "") {
+                    cocoMessage.warning("用户名,邮箱,密码,验证码不能为空", 3000);
+                } else if (username.length > 20 || password.length > 20) {
+                    cocoMessage.warning("用户名或密码不能超过20个字符", 3000);
+                } else if (username.match(/[^\w\u4e00-\u9fa5]/g)) {
+                    cocoMessage.warning("用户名不能包含特殊字符", 3000);
+                } else if (!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+                    cocoMessage.warning("邮箱格式不正确", 3000);
+                } else {
+                    $.ajax({
+                        url: "/Data/PHP/enroll.php",
+                        type: "post",
+                        data: {
+                            username: username,
+                            password: password,
+                            email: email,
+                            Ver: Yanzheng
+                        },
+                        success: function (data) {
+                            var result = GetApiInfo(data);
+                            if(result!=-1 && result!=-2){
+                                cocoMessage.success("注册成功,即将跳转主页...",3100);
+                                setTimeout("window.index='/'",3000);
+                            }
+                        }
+                    });
+                }
+            }
+            function Yanzhen() {
+                var email = $("input[name='email']").val();
+                if (email == "") {
+                    cocoMessage.warning("邮箱不能为空", 3000);
+                } else if (!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+                    cocoMessage.warning("邮箱格式不正确", 3000);
+                } else {
+                    $.ajax({
+                        url: "/Data/PHP/UserApi.php",
+                        type: "get",
+                        data: {
+                            api:4001,
+                            email: email
+                        },
+                        success: function (data) {
+                            var result = GetApiInfo(data);
+                            if(result!=-1 && result!=-2){
+                                cocoMessage.info("验证码已发送", 3000);
+                                Wait60s();
+                            }
+                        }
+                    });
+                }
+            }
+            function Wait60s() {
+                //设置按钮不可用
+                $("#Yanzheng").attr("disabled", true);
+                //按钮文字变灰
+                $("#Yanzheng").css("background-color", "#ccc");
+                var time = 60;
+                var timer = setInterval(function () {
+                    time--;
+                    $("#Yanzheng").html(time + "秒后重新获取");
+                    AutoSetDomSize(1);
+                    if (time == 0) {
+                        clearInterval(timer);
+                        //设置按钮可用
+                        $("#Yanzheng").attr("disabled", false);
+                        //按钮文字变红
+                        $("#Yanzheng").html("获取验证码");
+                    }
+                }, 1000);
+            }
+            function showUserRule(nextDen) {
+                new $Msg({
+                    title: "用户协议",
+                    content: "",
+                    btnName: ["同意", "拒绝"],
+                    cancle: function () {
+                        $("[id=acceptUser]:checkbox").prop("checked", false);
+                        let cancle = new $Msg({
+                            content: "不同意将无法继续使用",
+                            footer: false
+                        })
+                    },
+                    confirm: function () {
+                        $("[id=acceptUser]:checkbox").prop("checked", true);
+                        if (nextDen == 1) initDen();
+                    }
+                });
+            }
+            function showCookiesRule(nextDen) {
+                new $Msg({
+                    title: "Cookies使用协议",
+                    content: "Cookies是浏览器上一种记录信息的方式，常被用来记录账号登录状态，但不" +
+                        "过一些网站通过Cookies来追踪用户，推送广告，甚至盗取信息。\n" +
+                        "本网站收集用户意见将会为以下几项必须项作Cookies记录\n1.登录信息\n2.用户同意协议信息\n以上都是必须项，请各位用户谅解。",
+                    btnName: ["同意", "拒绝"],
+                    cancle: function () {
+                        $("[id=acceptCookies]:checkbox").prop("checked", false);
+                        let cancle = new $Msg({
+                            content: "不同意将无法继续使用",
+                            footer: false
+                        })
+                    },
+                    confirm: function () {
+                        $("[id=acceptCookies]:checkbox").prop("checked", true);
+                        if (nextDen == 1) initDen();
+                    }
+                });
+            }
+            $("#bar").load("/Data/PHP/bar.php");
+            $.get("/Data/PHP/Base.php?visit", function (data) { });
+        </script>
+</body>
+
+</html>
