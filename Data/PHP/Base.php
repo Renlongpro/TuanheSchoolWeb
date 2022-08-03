@@ -15,7 +15,7 @@ if (isset($_GET['visit'])) {
 function RecordVisit($sql)
 {  
    $nowDate = date("Y-m-d");
-   mysqli_select_db($sql, "bvhgujkxbb6cd");
+   mysqli_select_db($sql, "xxx");
    //set utf-8
    mysqli_query($sql, "set names utf8");
    //检查表是否存在
